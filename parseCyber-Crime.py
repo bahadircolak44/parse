@@ -8,23 +8,27 @@ control = True
 while control:
     print " The Last 10 Days: "
     url = "http://cybercrime-tracker.net/index.php"
-    soup = BeautifulSoup(urllib2.urlopen(url).read())
     
+    soup = BeautifulSoup(urllib2.urlopen(url).read())
     x = soup.findAll('tbody')
+    
     for row in x:
         y = soup.findAll('tr')
         for td in y:
+            #Dates
             dates = td.findAll('td')[0]
             date_splitted  = dates.text.split("-")
-            
+            #URLs
             domain_column = td.findAll('td')[1]
             domain=domain_column.text.split("/",1)[0]
             
-            if len(date_splitted)>2: 
+            if len(date_splitted)>2:
+                #Time of Domain
                 time = date(int(date_splitted[2]), int(date_splitted[1]), int(date_splitted[0])) 
                 today = date.today()
                 
                 if time > (today - timedelta(days=10)) :
+                    #Last 10 days
                     print dates.text +"\t|\t"+domain.replace("www.","")+"\n",
                 else:
                     control=False
